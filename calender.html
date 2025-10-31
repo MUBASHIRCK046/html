@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<title>Simple Calendar</title>
+<style>
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  justify-items: center;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.month {
+  text-align: center;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 95%;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+th, td {
+  border: 1px solid black;
+  width: 14.2%;
+  height: 30px;
+  text-align: center;
+}
+
+th {
+  background-color: yellow;
+}
+</style>
+</head>
+<body bgcolor="BLUE
+">
+<center>
+ <h2 style="color: white; font-size: 52px;"><u>Generate Calendar for a Year</u></h2>
+<p style="color: white; font-size: 39px;">Enter the year in the box:</p>
+  <input type="number" id="yearInput" placeholder="Enter a year">
+  <button onclick="generateCalendar()">Generate Calendar</button>
+</center>
+
+<div id="calendar"></div>
+
+<script>
+function generateCalendar() {
+  const year = document.getElementById('yearInput').value;
+  
+  if (!year || isNaN(year) || year < 1000 || year > 9999) {
+    alert('Please enter a valid year between 1000 and 9999!');
+    return;
+  }
+
+  const calendarDiv = document.getElementById('calendar');
+  calendarDiv.innerHTML = '';
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  for (let month = 0; month < 12; month++) {
+    let monthHTML = `
+      <div class="month">
+        <table>
+          <tr><th colspan="7"><strong>${months[month]} ${year}</strong></th></tr>
+          <tr>
+            <th>Sun</th><th>Mon</th><th>Tue</th>
+            <th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+          </tr>
+    `;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    let dayCounter = 1;
+
+    for (let i = 0; i < 6; i++) {
+      let row = '<tr>';
+      for (let j = 0; j < 7; j++) {
+        if (i === 0 && j < firstDay) {
+          row += '<td></td>';
+        } else if (dayCounter <= daysInMonth) {
+          row += `<td>${dayCounter}</td>`;
+          dayCounter++;
+        } else {
+          row += '<td></td>';
+        }
+      }
+      row += '</tr>';
+      monthHTML += row;
+      if (dayCounter > daysInMonth) break;
+    }
+
+    monthHTML += '</table></div>';
+    calendarDiv.innerHTML += monthHTML;
+  }
+}
+</script>
+</body>
+</html>
+
